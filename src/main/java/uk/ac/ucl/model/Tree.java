@@ -13,17 +13,18 @@ public class Tree {
     public Tree(String jsonFilePath) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode rootNode = mapper.readTree(new File(jsonFilePath));
-        this.root = parseDirectoryNode(rootNode);
+        this.root = parseDirectoryNode(rootNode, "");
     }
     
-    private DirectoryNode parseDirectoryNode(JsonNode node) {
-        DirectoryNode directoryNode = new DirectoryNode(node.get("name").asText());
+    private DirectoryNode parseDirectoryNode(JsonNode node, String path) {
+        String newpath = path + node.get("name").asText() + "/";
+        DirectoryNode directoryNode = new DirectoryNode(node.get("name").asText(), newpath);
         for (JsonNode childNode : node.get("children")) {
             if (childNode.has("fpath")) {
-                NoteNode noteNode = new NoteNode(childNode.get("fpath").asText(), childNode.get("title").asText());
+                NoteNode noteNode = new NoteNode(childNode.get("fpath").asText(), childNode.get("title").asText(), newpath);
                 directoryNode.addChild(noteNode);
             } else {
-                directoryNode.addChild(parseDirectoryNode(childNode));
+                directoryNode.addChild(parseDirectoryNode(childNode, newpath));
             }
         }
         return directoryNode;
@@ -33,22 +34,16 @@ public class Tree {
         return root;
     }
 
-    public void addDirectory(String parentDirName, String dirName) {
-        DirectoryNode parentDir = root.findDirectory(parentDirName);
-        if (parentDir != null) {
-            parentDir.addChild(new DirectoryNode(dirName));
+    public int saveNote(String fname, String title, String path) {
+        NoteNode noteNode = new NoteNode(fname, title, path);
+        DirectoryNode directoryNode = root.findDirectory(path);
+        if (directoryNode != null) {
+            directoryNode.addChild(noteNode);
+            return 0;
         } else {
-            System.out.println("Parent directory not found");
+            return -1;
         }
-    }
 
-    public void addNote(String parentDirName, String fpath, String title) {
-        DirectoryNode parentDir = root.findDirectory(parentDirName);
-        if (parentDir != null) {
-            parentDir.addChild(new NoteNode(fpath, title));
-        } else {
-            System.out.println("Parent directory not found");
-        }
     }
 
     public void saveToFile(String jsonFilePath) throws IOException {
@@ -61,13 +56,18 @@ public class Tree {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode();
         node.put("name", directoryNode.getName());
+        
+        // Create empty children array first - this is the crucial fix
+        node.putArray("children");
+        
+        // Then add children to it if they exist
         for (Object child : directoryNode.getChildren()) {
             if (child instanceof DirectoryNode) {
                 node.withArray("children").add(serializeDirectoryNode((DirectoryNode) child));
             } else if (child instanceof NoteNode) {
                 NoteNode noteNode = (NoteNode) child;
                 ObjectNode noteNodeJson = mapper.createObjectNode();
-                noteNodeJson.put("fpath", noteNode.getFpath());
+                noteNodeJson.put("fpath", noteNode.getFname());
                 noteNodeJson.put("title", noteNode.getTitle());
                 node.withArray("children").add(noteNodeJson);
             }

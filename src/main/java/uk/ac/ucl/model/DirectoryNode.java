@@ -6,14 +6,16 @@ import java.util.List;
 public class DirectoryNode {
     private String name;
     private List<Object> children;
+    private String path;
 
     public DirectoryNode() {
         this.children = new ArrayList<>();
     }
 
-    public DirectoryNode(String name) {
+    public DirectoryNode(String name, String path) {
         this.name = name;
         this.children = new ArrayList<>();
+        this.path = path;
     }
 
     public String getName() {
@@ -28,6 +30,10 @@ public class DirectoryNode {
         return children;
     }
 
+    public String getPath() {
+        return path;
+    }
+
     public void setChildren(List<Object> children) {
         this.children = children;
     }
@@ -36,15 +42,16 @@ public class DirectoryNode {
         this.children.add(child);
     }
 
-    public DirectoryNode findDirectory(String name) {
-        if (this.name.equals(name)) {
+    public DirectoryNode findDirectory(String path) {
+        if (this.path.equals(path)) {
             return this;
         }
         for (Object child : children) {
             if (child instanceof DirectoryNode) {
-                DirectoryNode found = ((DirectoryNode) child).findDirectory(name);
-                if (found != null) {
-                    return found;
+                DirectoryNode directoryNode = (DirectoryNode) child;
+                DirectoryNode result = directoryNode.findDirectory(path);
+                if (result != null) {
+                    return result;
                 }
             }
         }

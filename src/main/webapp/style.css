@@ -1,0 +1,13 @@
+nav {
+    height: 100%;
+    width: 200px;
+    position: fixed;
+    top: 100px;
+    left: 0;
+    background-color: #111;
+    padding-top: 20px;
+}
+
+nav ul li {
+    padding: 10px;
+}
