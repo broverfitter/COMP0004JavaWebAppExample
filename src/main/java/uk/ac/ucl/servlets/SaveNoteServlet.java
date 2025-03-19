@@ -40,7 +40,7 @@ public class SaveNoteServlet extends HttpServlet
 
     String filename;
 
-    if (notePath == "") {
+    if (notePath == null || notePath.isEmpty()) {
         notePath = "root/";
     }
 
@@ -51,6 +51,7 @@ public class SaveNoteServlet extends HttpServlet
         tree.saveNote(filename, titleContent, notePath);
     } else {
         filename = noteId;
+        tree.updateNoteTitle(notePath, filename, titleContent);
     }
 
     File noteFile = new File(context.getRealPath("/notes/" + filename));

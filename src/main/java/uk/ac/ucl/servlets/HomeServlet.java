@@ -12,10 +12,6 @@ import java.io.IOException;
 import uk.ac.ucl.model.Tree;
 import uk.ac.ucl.model.DirectoryNode;
 
-// The servlet invoked to perform a search.
-// The url http://localhost:8080/runsearch.html is mapped to calling doPost on the servlet object.
-// The servlet object is created automatically, you just provide the class.
-
 @WebServlet("/")
 public class HomeServlet extends HttpServlet
 {
@@ -24,15 +20,6 @@ public class HomeServlet extends HttpServlet
           throws ServletException, IOException {
     ServletContext context = getServletContext();
     
-    // Load the JSON structure and create the Tree object
-    String jsonFilePath = context.getRealPath("/structure.json");
-    Tree tree = new Tree(jsonFilePath);
-    DirectoryNode root = tree.getRoot();
-    
-    // Set the tree root as a request attribu
-    request.setAttribute("tree", root);
-    
-    // Now forward to a JSP page instead of HTML for dynamic rendering
     RequestDispatcher dispatch = context.getRequestDispatcher("/home.jsp");
     dispatch.forward(request, response);
   }

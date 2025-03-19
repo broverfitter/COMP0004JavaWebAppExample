@@ -43,6 +43,12 @@ public class DirectoryNode {
     }
 
     public DirectoryNode findDirectory(String path) {
+        // Check if this is a request for the root directory
+        if (path == null || path.isEmpty() || path.equals("root/")) {
+            return this;  // Return the root node itself
+        }
+        
+        // Existing path handling code for subdirectories
         if (this.path.equals(path)) {
             return this;
         }
@@ -52,6 +58,57 @@ public class DirectoryNode {
                 DirectoryNode result = directoryNode.findDirectory(path);
                 if (result != null) {
                     return result;
+                }
+            }
+        }
+        return null;
+    }
+
+    public NoteNode findNoteChild(String fname) {
+        for (Object child : children) {
+            if (child instanceof NoteNode) {
+                NoteNode noteNode = (NoteNode) child;
+                if (noteNode.getFname().equals(fname)) {
+                    return noteNode;
+                }
+            }
+        }
+        return null;
+    }
+
+    public void findAndDeleteChild(String fname) {
+        for (Object child : children) {
+            if (child instanceof NoteNode) {
+                NoteNode noteNode = (NoteNode) child;
+                if (noteNode.getFname().equals(fname)) {
+                    children.remove(child);
+                    return;
+                }
+            }
+            else if (child instanceof DirectoryNode) {
+                DirectoryNode directoryNode = (DirectoryNode) child;
+                directoryNode.findAndDeleteChild(fname);
+            }
+        }
+    }
+
+    public DirectoryNode findAndDeleteDir(String path) {
+        // get rid of 'root/'
+        path = path.substring(5);
+        String remainingPath = path.substring(path.indexOf("/") + 1);
+        String nextDir = path.substring(0, path.indexOf("/") + 1);
+
+        for (Object child : children) {
+            if (child instanceof DirectoryNode) {
+                DirectoryNode directoryNode = (DirectoryNode) child;
+                if ((directoryNode.getName() + "/").equals(nextDir)) {
+                    if (remainingPath.equals("")) {     
+                        children.remove(child);
+                        return directoryNode;
+                    }
+                    else {
+                        directoryNode.findAndDeleteDir(remainingPath);
+                    }
                 }
             }
         }

@@ -3,35 +3,23 @@
   "children" : [ {
     "name" : "folder1",
     "children" : [ {
-      "name" : "folder1",
+      "name" : "folder2",
       "children" : [ {
         "fpath" : "71c2f7e6-584e-4673-bc6e-71728e6639b8.html",
         "title" : "Hello world."
+      }, {
+        "name" : "another folder",
+        "children" : [ ]
       } ]
     }, {
-      "fpath" : "9908941d-4c12-4df7-aec1-b1f50d18cad2.html",
-      "title" : "u"
-    }, {
-      "fpath" : "03c2d381-e860-48c2-b144-a7f186e85ac4.html",
-      "title" : "h3llo world"
-    }, {
-      "fpath" : "1dd180b0-478f-46dd-9959-8a62dd3bd752.html",
-      "title" : "Hello world"
+      "fpath" : "22fe8693-1a34-406f-98a9-277a18ed3cf8.html",
+      "title" : "this is a new file"
     } ]
   }, {
-    "name" : "folder1",
+    "name" : "folder3",
     "children" : [ ]
   }, {
-    "fpath" : "8b763feb-9ce0-4e51-a963-e6181eb2c10b.html",
-    "title" : "test"
-  }, {
-    "fpath" : "5fbb4b4b-8a53-4d6a-af3f-b0def94a3334.html",
-    "title" : "Title"
-  }, {
-    "fpath" : "cb020a8d-1ee1-4829-ab13-943331166e30.html",
-    "title" : "good morning"
-  }, {
-    "fpath" : "f67c646e-d2f5-4649-9bc2-d9538712df47.html",
-    "title" : "u"
+    "name" : "mrah v2",
+    "children" : [ ]
   } ]
 }

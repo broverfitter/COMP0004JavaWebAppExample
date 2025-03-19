@@ -74,4 +74,53 @@ public class Tree {
         }
         return node;
     }
+
+    public boolean createDirectory(String parentPath, String dirName) {
+        
+        // Find the parent directory node
+        DirectoryNode parentDir = root;
+        if (!parentPath.equals("root/")) {
+            parentDir = root.findDirectory(parentPath);
+        }
+        
+        // Check if directory with same name already exists
+        for (Object child : parentDir.getChildren()) {
+            if (child instanceof DirectoryNode) {
+                DirectoryNode existingDir = (DirectoryNode) child;
+                if (existingDir.getName().equals(dirName)) {
+                    return false; // Directory with this name already exists
+                }
+            }
+        }
+        
+        // Create new directory node
+        String newDirPath = parentPath + dirName + "/";
+        DirectoryNode newDir = new DirectoryNode(dirName, newDirPath);
+        
+        // Add it to parent's children
+        parentDir.addChild(newDir);
+        
+        return true;
+    }
+
+    public int updateNoteTitle(String path, String fname, String newTitle) {
+        DirectoryNode directoryNode = root.findDirectory(path);
+        if (directoryNode != null) {
+            NoteNode noteNode = directoryNode.findNoteChild(fname);
+            if (noteNode != null) {
+                noteNode.setTitle(newTitle);
+                return 0;
+            }
+        }
+        return -1;
+    }
+
+    public int updateDirTitle(String path, String newName) {
+        DirectoryNode directoryNode = root.findDirectory(path);
+        if (directoryNode != null) {
+            directoryNode.setName(newName);
+            return 0;
+        }
+        return -1;
+    }
 }

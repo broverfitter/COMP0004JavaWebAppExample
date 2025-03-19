@@ -22,4 +22,8 @@ public class NoteNode {
     public String getPath() {
         return path;
     }
+
+    public void setTitle(String newTitle) {
+        title = newTitle;
+    }
 }
